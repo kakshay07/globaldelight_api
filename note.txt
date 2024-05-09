@@ -1,0 +1,31 @@
+return the object 
+
+
+JSON.stringify()--->is a method in JavaScript used to convert JavaScript objects into JSON strings. 
+JSON.parse()--->is a method used to parse JSON strings and convert them into JavaScript objects.
+We use the updater function syntax (prev => ...), where prev represents the previous state value of allData. -->this is updater function in react hooks 
+(prev=>({...prev ,{...data1,profilinformation:JSON.parse(data.profilinformation)}}))--> here it will cretates the new data object data1
+and adds proferty of parse to it and finally it is updated in prevstste for react hooks
+
+
+this syntax is not for react hook
+another way is create a new array is   let newResults = [];
+        for (let data of results) {
+          // console.log(data.profileInformation);
+          if (data.profileInformation && data.profileInformation.length) {
+            newResults.push({
+              ...data,
+              profileInformation: JSON.parse(data.profileInformation), // here it parse the value and put it insidee ..data and it is pushed to newresults
+            });
+          } else {
+            newResults.push(data);
+          }
+        }
+
+
+        {...postData, file} creates a new object by combining the properties of two objects: postData and file.
+
+Let's break it down:
+
+{...postData}: This spreads all the properties of the postData object into a new object. Essentially, it creates a shallow copy of the postData object.
+, file: This adds another property file to the new object. If file is already defined in postData, its value will be overridden by the value of file

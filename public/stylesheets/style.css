@@ -1,0 +1,20 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+p{
+padding-top:200%;
+  border-radius: 10px;
+  position:absolute;
+  display:flex;
+  flex-flow: column-reverse;
+  text-align:center;
+  /* text-decoration:underline; */
+  display:block;
+  background-attachment:fixed;
+}
