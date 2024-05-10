@@ -48,21 +48,30 @@ router.get("/get/dept", (req, res) => {
   }
 });
 
-router.get('/dept/count/', (req,res) => {
-  // const id=parseInt(req.params.id);
-const {dept_name}=req.body;
-  try{
-     const response=connection.query("Select count(*) as dept_count from department where dept_name= ?",[dept_name],(err,result)=>{
-      if(err) return res.status(400).send("...")
-      if(result && result.length > 0)  return res.status(200).send(result);
-    return res.status(500).send("internal server error")
-     })
-  }catch(err){
-    console.log(err);
 
+// count of department in no.
+router.get('/dept/count/', (req, res) => {
+  const { dept_name } = req.body;
+
+  try {
+    if (!dept_name || typeof dept_name !== 'string') {
+      return res.status(400).send("Invalid department name.");
+    }
+    const query = "SELECT COUNT(*) AS dept_count FROM department WHERE dept_name = ?";
+    const [rows] =connection.query(query, [dept_name]);
+
+    if (rows && rows.length > 0) {
+      return res.status(200).send(rows[0]);
+    }
+    return res.status(404).send("Department not found.");
+  } catch (error) {
+    console.error("Error while fetching department count:", error);
+    return res.status(500).send("Internal server error.");
   }
-   
 });
+
+
+
  router.put("/update/dept/:id",(req,res)=>{
   try {
     const {

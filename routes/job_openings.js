@@ -79,36 +79,37 @@ router.get("/get/jobs/", (req, res) => {
   }
 });
 
-router.get("/getbyId/:id",(req,res)=>{
-const Job_Id=req.params.id;
-console.log(Job_Id);
-  try{
-    const response=connection.query('SELECT * FROM job_openings where id=?',[Job_Id],(err,result)=>{
-      if(err) return res.status(400).send("error occured in sql query");
-      if(result && result.length>0) {
-         const newResults = [];
-      for (let data of result) {
-        // console.log(data.profileInformation);
-        if (data.profileInformation && data.profileInformation.length) {
-          newResults.push({
-            ...data,
-            profileInformation: JSON.parse(data.profileInformation),
-          });
-        } else {
-          newResults.push(data);
+router.get("/getbyId/:id", (req, res) => {
+  const Job_Id = req.params.id;
+  console.log(Job_Id);
+  try {
+    const response = connection.query(
+      "SELECT * FROM job_openings where id=?",
+      [Job_Id],
+      (err, result) => {
+        if (err) return res.status(400).send("error occured in sql query");
+        if (result && result.length > 0) {
+          const newResults = [];
+          for (let data of result) {
+            // console.log(data.profileInformation);
+            if (data.profileInformation && data.profileInformation.length) {
+              newResults.push({
+                ...data,
+                profileInformation: JSON.parse(data.profileInformation),
+              });
+            } else {
+              newResults.push(data);
+            }
+          }
+          return res.status(200).send({ data: newResults });
         }
+        return res.status(500).send("internal server error");
       }
-      return res.status(200).send({ data:newResults});
-    }
-      return res.status(500).send("internal server error")
-    })
+    );
+  } catch (err) {
+    console.log(err);
   }
-  catch(err)
-
-{
-  console.log(err);
-}
-})
+});
 
 router.put("/update/:id", (req, res) => {
   // const profileInformation=[];
@@ -151,6 +152,28 @@ router.put("/update/:id", (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(500).send("Internal server error");
+  }
+});
+
+router.get("/getapplicantById/:id", (req, res) => {
+  const id = req.params.id;
+  console.log(id, "id");
+  try {
+    const a = connection.query(
+      "SELECT * FROM APPLICANTS WHERE job_id= ?",
+      [id],
+      (err, result) => {
+        if (err) return console.log("something went wrong in query");
+        if (result && result.length > 0) {
+          console.log(result);
+          return res.status(200).send(result);
+        } else if (result.length === 0) return res.status(200).send(result);
+
+        return res.status(400).send("failed to get data");
+      }
+    );
+  } catch (err) {
+    return res.status(500).send("internal error...");
   }
 });
 
